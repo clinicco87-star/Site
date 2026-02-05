@@ -1,5 +1,5 @@
-// Supabase Configuration - FIXED VERSION
-// IMPORTANT: Replace these with your actual Supabase credentials
+
+
 const SUPABASE_URL = 'https://ezbcxhuzisiavlkpzocl.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV6YmN4aHV6aXNpYXZsa3B6b2NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwNDAxNTUsImV4cCI6MjA4NTYxNjE1NX0.INNe6q8lF-dYmfDBlamd0bqv7T2T0gCALklU0Oe3oIs';
 

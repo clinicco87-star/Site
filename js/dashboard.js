@@ -553,17 +553,34 @@ function updateUpcomingExpirations() {
         departmentOverview.innerHTML = departmentHTML;
     }
 
-    function checkIfOnLeave(leaveDates) {
-        if (!leaveDates || leaveDates.length === 0) return false;
-        
-        const today = new Date().toISOString().split('T')[0];
-        
-        return leaveDates.some(leave => {
-            const from = leave.from.split('T')[0];
-            const to = leave.to.split('T')[0];
-            return today >= from && today <= to;
-        });
+function checkIfOnLeave(leaveDates) {
+    if (!leaveDates || !Array.isArray(leaveDates) || leaveDates.length === 0) {
+        return false;
     }
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to start of day
+    
+    return leaveDates.some(leave => {
+        if (!leave || !leave.from || !leave.to) return false;
+        
+        try {
+            // Parse the dates
+            const fromDate = new Date(leave.from);
+            const toDate = new Date(leave.to);
+            
+            // Normalize to start of day for comparison
+            fromDate.setHours(0, 0, 0, 0);
+            toDate.setHours(23, 59, 59, 999);
+            
+            // Check if today is within the leave period
+            return today >= fromDate && today <= toDate;
+        } catch (error) {
+            console.error('Error parsing leave dates:', error);
+            return false;
+        }
+    });
+}
 
     function getTimeAgo(date) {
         const now = new Date();
