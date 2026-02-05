@@ -211,28 +211,38 @@ function initDashboard() {
         }
     }
 
-    async function loadTodayAppointments() {
-        const today = new Date().toISOString().split('T')[0];
+ async function loadTodayAppointments() {
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${year}-${month}-${day}`;
+    
+    console.log(`Looking for appointments on: ${todayStr}`); // Debug log
+    
+    try {
+        const { data, error } = await window.supabaseClient
+            .from('schedules')
+            .select(`
+                *,
+                clients(name, therapy_type),
+                therapists(name, department)
+            `)
+            .eq('date', todayStr)
+            .eq('status', 'scheduled')
+            .order('timeslot');
         
-        try {
-            const { data, error } = await window.supabaseClient
-                .from('schedules')
-                .select(`
-                    *,
-                    clients(name, therapy_type),
-                    therapists(name, department)
-                `)
-                .eq('date', today)
-                .eq('status', 'scheduled')
-                .order('timeslot');
-            
-            if (error) throw error;
-            return data || [];
-        } catch (error) {
-            console.error('Error loading today\'s appointments:', error);
-            return [];
-        }
+        if (error) throw error;
+        
+        console.log(`Found ${data?.length || 0} appointments for today:`, data); // Debug log
+        
+        return data || [];
+    } catch (error) {
+        console.error('Error loading today\'s appointments:', error);
+        return [];
     }
+}
 
     async function loadDepartments() {
         const departments = Utils.getTherapyDepartments();
