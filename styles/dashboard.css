@@ -1543,3 +1543,101 @@
         font-size: 0.8rem !important;
     }
 }
+/* Notification styling additions */
+.notification-item {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-color);
+}
+
+.notification-item[data-type="warning"] {
+    border-left-color: var(--warning-color);
+}
+
+.notification-item[data-type="info"] {
+    border-left-color: var(--info-color);
+}
+
+.notification-item[data-type="leave"] {
+    border-left-color: #8b5cf6;
+}
+
+.notification-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(-5px);
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.notification-item[data-type="info"] .notification-icon {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info-color);
+}
+
+.notification-item[data-type="warning"] .notification-icon {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+}
+
+.notification-item[data-type="leave"] .notification-icon {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8b5cf6;
+}
+
+.notification-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--danger-color);
+    border-radius: 50%;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+#notificationCount.has-notifications {
+    animation: pulse 2s infinite;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--dark-text);
+    font-weight: 500;
+}
+
+.empty-state small {
+    font-size: 0.8rem;
+    color: var(--dark-text-secondary);
+    margin-top: 0.375rem;
+}

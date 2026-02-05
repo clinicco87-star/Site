@@ -654,90 +654,159 @@ function checkIfOnLeave(leaveDates) {
         currentDate.textContent = now.toLocaleDateString('en-US', options);
     }
 
-    async function checkNotifications() {
-        try {
-            // Check for expiring clients
-            const { data: expiringClients } = await window.supabaseClient
-                .from('clients')
-                .select('*')
-                .lt('expiry_date', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString())
-                .gt('expiry_date', new Date().toISOString());
+async function checkNotifications() {
+    try {
+        // Check for expiring clients (within next 3 days)
+        const { data: expiringClients } = await window.supabaseClient
+            .from('clients')
+            .select('*')
+            .lt('expiry_date', new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString())
+            .gt('expiry_date', new Date().toISOString());
+        
+        // Check for today's appointments (use the same logic as loadTodayAppointments)
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const todayStr = `${year}-${month}-${day}`;
+        
+        const { data: todaysAppointments } = await window.supabaseClient
+            .from('schedules')
+            .select(`
+                *,
+                clients(name, therapy_type),
+                therapists(name, department)
+            `)
+            .eq('date', todayStr)
+            .eq('status', 'scheduled');
+        
+        // Build notifications
+        notifications = [];
+        
+        // Add expiring clients notification
+        if (expiringClients && expiringClients.length > 0) {
+            notifications.push({
+                id: 'expiring-clients',
+                title: 'Upcoming Expirations',
+                message: `${expiringClients.length} client${expiringClients.length !== 1 ? 's' : ''} expiring in next 3 days`,
+                type: 'warning',
+                icon: 'fas fa-exclamation-triangle',
+                time: new Date().toISOString(),
+                unread: true
+            });
+        }
+        
+        // Add today's appointments notification
+        if (todaysAppointments && todaysAppointments.length > 0) {
+            notifications.push({
+                id: 'today-appointments',
+                title: "Today's Schedule",
+                message: `You have ${todaysAppointments.length} appointment${todaysAppointments.length !== 1 ? 's' : ''} scheduled today`,
+                type: 'info',
+                icon: 'fas fa-calendar-day',
+                time: new Date().toISOString(),
+                unread: true
+            });
+        }
+        
+        // Check for therapists on leave today
+        const { data: therapistsData } = await window.supabaseClient
+            .from('therapists')
+            .select('*')
+            .eq('is_active', true);
+        
+        if (therapistsData) {
+            const therapistsOnLeave = therapistsData.filter(therapist => {
+                return checkIfOnLeave(therapist.leave_dates);
+            });
             
-            // Check for today's appointments
-            const today = new Date().toISOString().split('T')[0];
-            const { data: todaysAppointments } = await window.supabaseClient
-                .from('schedules')
-                .select('*')
-                .eq('date', today);
-            
-            // Build notifications
-            notifications = [];
-            
-            if (expiringClients && expiringClients.length > 0) {
+            if (therapistsOnLeave.length > 0) {
                 notifications.push({
-                    id: 'expiring-clients',
-                    title: 'Upcoming Expirations',
-                    message: `${expiringClients.length} client${expiringClients.length !== 1 ? 's' : ''} expiring soon`,
-                    type: 'warning',
+                    id: 'therapists-on-leave',
+                    title: 'Therapists on Leave',
+                    message: `${therapistsOnLeave.length} therapist${therapistsOnLeave.length !== 1 ? 's' : ''} on leave today`,
+                    type: 'leave',
+                    icon: 'fas fa-bed',
                     time: new Date().toISOString(),
                     unread: true
                 });
             }
-            
-            if (todaysAppointments && todaysAppointments.length > 0) {
-                notifications.push({
-                    id: 'today-appointments',
-                    title: "Today's Schedule",
-                    message: `${todaysAppointments.length} appointment${todaysAppointments.length !== 1 ? 's' : ''} today`,
-                    type: 'info',
-                    time: new Date().toISOString(),
-                    unread: true
-                });
+        }
+        
+        // Update notification count
+        const unreadCount = notifications.filter(n => n.unread).length;
+        const notificationCountElement = document.getElementById('notificationCount');
+        if (notificationCountElement) {
+            notificationCountElement.textContent = unreadCount;
+            if (unreadCount > 0) {
+                notificationCountElement.classList.add('has-notifications');
+            } else {
+                notificationCountElement.classList.remove('has-notifications');
             }
+        }
+        
+        // Update notification panel
+        updateNotificationPanel();
+        
+    } catch (error) {
+        console.error('Error checking notifications:', error);
+    }
+}
+
+  function updateNotificationPanel() {
+    const notificationList = document.getElementById('notificationList');
+    
+    if (notifications.length === 0) {
+        notificationList.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-bell-slash"></i>
+                <p>No notifications</p>
+                <small>All caught up!</small>
+            </div>
+        `;
+        return;
+    }
+    
+    let notificationHTML = '';
+    
+    notifications.forEach(notification => {
+        const timeAgo = getTimeAgo(new Date(notification.time));
+        
+        notificationHTML += `
+            <div class="notification-item ${notification.unread ? 'unread' : ''}" 
+                 data-type="${notification.type}">
+                <div class="notification-icon">
+                    <i class="${notification.icon || 'fas fa-bell'}"></i>
+                </div>
+                <div class="notification-content">
+                    <h4>${notification.title}</h4>
+                    <p>${notification.message}</p>
+                    <div class="notification-time">${timeAgo}</div>
+                </div>
+                ${notification.unread ? '<div class="notification-dot"></div>' : ''}
+            </div>
+        `;
+    });
+    
+    notificationList.innerHTML = notificationHTML;
+    
+    // Add click handlers for notifications
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.addEventListener('click', function() {
+            // Mark as read
+            const type = this.dataset.type;
+            this.classList.remove('unread');
+            this.querySelector('.notification-dot')?.remove();
             
             // Update notification count
-            const unreadCount = notifications.filter(n => n.unread).length;
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
             document.getElementById('notificationCount').textContent = unreadCount;
-            
-            // Update notification panel
-            updateNotificationPanel();
-            
-        } catch (error) {
-            console.error('Error checking notifications:', error);
-        }
-    }
-
-    function updateNotificationPanel() {
-        const notificationList = document.getElementById('notificationList');
-        
-        if (notifications.length === 0) {
-            notificationList.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-bell-slash"></i>
-                    <p>No notifications</p>
-                </div>
-            `;
-            return;
-        }
-        
-        let notificationHTML = '';
-        
-        notifications.forEach(notification => {
-            const timeAgo = getTimeAgo(new Date(notification.time));
-            
-            notificationHTML += `
-                <div class="notification-item ${notification.unread ? 'unread' : ''}">
-                    <div class="notification-content">
-                        <h4>${notification.title}</h4>
-                        <p>${notification.message}</p>
-                        <div class="notification-time">${timeAgo}</div>
-                    </div>
-                </div>
-            `;
+            if (unreadCount === 0) {
+                document.getElementById('notificationCount').classList.remove('has-notifications');
+            }
         });
-        
-        notificationList.innerHTML = notificationHTML;
-    }
+    });
+}
 
     async function handleLogout() {
         const confirmed = await Utils.confirmDialog(
