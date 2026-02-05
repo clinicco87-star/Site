@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Schedule - Clinic Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/schedule.css">
+    <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body class="schedule-page">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-3d">
+                <div class="logo-inner">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>Clinic</h2>
+                    <p>Management</p>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item" data-page="dashboard">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="nav-text">Dashboard</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="therapists">
+                <div class="nav-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <span class="nav-text">Therapists</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="clients">
+                <div class="nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <span class="nav-text">Clients</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item active" data-page="schedule">
+                <div class="nav-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <span class="nav-text">Schedule</span>
+                <div class="nav-glow"></div>
+            </li>
+        </ul>
+
+        <div class="user-profile">
+            <div class="user-avatar">
+                <div class="avatar-3d">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            <div class="user-info">
+                <h4 id="adminName">Admin User</h4>
+                <p id="adminEmail">admin@clinic.com</p>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-left">
+                <h1 class="page-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedule Management</span>
+                </h1>
+                <p class="page-subtitle">View and manage appointments</p>
+            </div>
+            <div class="header-right">
+                <button class="header-btn btn-3d" id="addAppointmentBtn">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Add Appointment</span>
+                </button>
+                <div class="date-navigation">
+                    <button class="nav-btn" id="prevDate">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <input type="date" id="datePicker" value="">
+                    <button class="nav-btn" id="nextDate">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Schedule Stats -->
+        <section class="schedule-stats">
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="scheduledCount">0</h3>
+                        <p>Scheduled Today</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="ongoingCount">0</h3>
+                        <p>Ongoing Now</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="therapistCount">0</h3>
+                        <p>Therapists Available</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="conflictCount">0</h3>
+                        <p>Potential Conflicts</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schedule View Toggle -->
+        <section class="view-toggle">
+            <div class="toggle-header">
+                <h3><i class="fas fa-calendar"></i> View Type</h3>
+            </div>
+            <div class="toggle-buttons">
+                <button class="toggle-btn active" data-view="day">
+                    <i class="fas fa-calendar-day"></i>
+                    Day View
+                </button>
+                <button class="toggle-btn" data-view="week">
+                    <i class="fas fa-calendar-week"></i>
+                    Week View
+                </button>
+                <button class="toggle-btn" data-view="list">
+                    <i class="fas fa-list"></i>
+                    List View
+                </button>
+                <button class="toggle-btn" data-view="therapist">
+                    <i class="fas fa-user-md"></i>
+                    Therapist View
+                </button>
+            </div>
+        </section>
+
+        <!-- Day View -->
+        <section class="day-view active" id="dayView">
+            <div class="view-header">
+                <h2 id="currentDateDisplay">Today, January 1, 2024</h2>
+                <div class="view-actions">
+                    <button class="action-btn" id="printSchedule">
+                        <i class="fas fa-print"></i>
+                        Print
+                    </button>
+                    <button class="action-btn" id="exportSchedule">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+            
+            <div class="timeline-container">
+                <!-- Timeline will be loaded here -->
+                <div class="empty-state">
+                    <i class="fas fa-calendar-times"></i>
+                    <h3>No Appointments Today</h3>
+                    <p>Schedule appointments to see them here</p>
+                    <button class="btn-primary btn-3d" id="emptyAddBtn">
+                        <i class="fas fa-calendar-plus"></i>
+                        Add Appointment
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Week View -->
+        <section class="week-view" id="weekView">
+            <div class="view-header">
+                <h2 id="weekDisplay">Week 1, January 2024</h2>
+                <div class="week-navigation">
+                    <button class="nav-btn" id="prevWeek">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="nav-btn" id="thisWeek">
+                        This Week
+                    </button>
+                    <button class="nav-btn" id="nextWeek">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="week-grid">
+                <!-- Week grid will be loaded here -->
+            </div>
+        </section>
+
+        <!-- List View -->
+        <section class="list-view" id="listView">
+            <div class="view-header">
+                <h2>All Appointments</h2>
+                <div class="list-filters">
+                    <select id="listFilterStatus">
+                        <option value="all">All Status</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    <select id="listFilterTherapy">
+                        <option value="all">All Therapies</option>
+                        <!-- Therapy options will be populated by JS -->
+                    </select>
+                    <select id="listFilterTherapist">
+                        <option value="all">All Therapists</option>
+                        <!-- Therapist options will be populated by JS -->
+                    </select>
+                    <input type="text" id="listSearch" placeholder="Search appointments...">
+                </div>
+            </div>
+            
+            <div class="list-container">
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Client</th>
+                            <th>Therapist</th>
+                            <th>Therapy</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentsList">
+                        <!-- Appointments will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="list-footer">
+                <div class="pagination" id="listPagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Therapist View -->
+        <section class="therapist-view" id="therapistView">
+            <div class="view-header">
+                <h2>Therapist Availability</h2>
+                <div class="therapist-filters">
+                    <select id="therapistFilter">
+                        <option value="all">All Therapists</option>
+                        <!-- Therapist options will be populated by JS -->
+                    </select>
+                    <input type="date" id="therapistDate" value="">
+                    <button class="action-btn" id="findAvailableSlots">
+                        <i class="fas fa-search"></i>
+                        Find Available Slots
+                    </button>
+                </div>
+            </div>
+            
+            <div class="therapist-grid" id="therapistGrid">
+                <!-- Therapist schedules will be loaded here -->
+                <div class="empty-state">
+                    <i class="fas fa-user-md"></i>
+                    <h3>No Therapist Data Available</h3>
+                    <p>Add therapists to see their schedules</p>
+                </div>
+            </div>
+            
+            <div class="availability-summary">
+                <h3><i class="fas fa-clock"></i> Availability Summary</h3>
+                <div class="summary-cards" id="availabilitySummary">
+                    <!-- Summary will be loaded here -->
+                </div>
+            </div>
+        </section>
+         <!-- Copyright Footer -->
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+                <p>Designed and maintained by <strong><a href="mailto:alwin4778@gmail.com">Alwin George</a></strong> and <strong>
+        <a href="mailto:ssaji5956@gmail.com">Sijo Saji</a></strong></p>
+               <p class="copyright">Copyright © <span id="currentYear"></span> clinic managenment</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Add Appointment Modal -->
+    <div class="modal-overlay" id="appointmentModal">
+        <div class="modal-container modal-3d">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-plus"></i> New Appointment</h3>
+                <button class="modal-close" id="closeAppointmentModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label for="appointmentClient">
+                            <i class="fas fa-user"></i> Client *
+                        </label>
+                        <select id="appointmentClient" required>
+                            <option value="">Select Client</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                        <div class="client-expiry-warning" id="clientExpiryWarning" style="display: none; margin-top: 8px; padding: 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; color: #ef4444; font-size: 12px;">
+                            <i class="fas fa-exclamation-triangle"></i> This client's subscription has expired or will expire soon
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointmentDate">
+                                <i class="fas fa-calendar"></i> Date *
+                            </label>
+                            <input type="date" id="appointmentDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="appointmentTime">
+                                <i class="fas fa-clock"></i> Time *
+                            </label>
+                            <select id="appointmentTime" required>
+                                <option value="">Select Time</option>
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointmentTherapist">
+                            <i class="fas fa-user-md"></i> Therapist *
+                        </label>
+                        <select id="appointmentTherapist" required>
+                            <option value="">Select Therapist</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="appointmentNotes">
+                            <i class="fas fa-sticky-note"></i> Notes
+                        </label>
+                        <textarea id="appointmentNotes" rows="3"
+                                  placeholder="Appointment notes..."></textarea>
+                    </div>
+                    
+                    <div class="conflict-check" id="conflictCheck">
+                        <!-- Conflict warning will appear here -->
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelAppointment">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary btn-3d">
+                            <i class="fas fa-calendar-check"></i>
+                            Schedule Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Appointment Modal -->
+    <div class="modal-overlay" id="editAppointmentModal">
+        <div class="modal-container modal-3d">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Appointment</h3>
+                <button class="modal-close" id="closeEditModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editAppointmentForm">
+                    <div class="form-group">
+                        <label for="editStatus">
+                            <i class="fas fa-toggle-on"></i> Status *
+                        </label>
+                        <select id="editStatus" required>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editDate">
+                                <i class="fas fa-calendar"></i> Date
+                            </label>
+                            <input type="date" id="editDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editTime">
+                                <i class="fas fa-clock"></i> Time
+                            </label>
+                            <select id="editTime" required>
+                                <option value="">Select Time</option>
+                                <!-- Options will be populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTherapist">
+                            <i class="fas fa-user-md"></i> Therapist
+                        </label>
+                        <select id="editTherapist" required>
+                            <option value="">Select Therapist</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editNotes">
+                            <i class="fas fa-sticky-note"></i> Notes
+                        </label>
+                        <textarea id="editNotes" rows="3"
+                                  placeholder="Appointment notes..."></textarea>
+                    </div>
+                    
+                    <div class="conflict-check" id="editConflictCheck">
+                        <!-- Conflict warning will appear here -->
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-danger" id="deleteAppointment">
+                            <i class="fas fa-trash"></i>
+                            Delete
+                        </button>
+                        <div class="action-right">
+                            <button type="button" class="btn-secondary" id="cancelEdit">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn-primary btn-3d">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="spinner-3d">
+            <div class="spinner-inner"></div>
+        </div>
+        <p>Loading Schedule...</p>
+    </div>
+
+    <!-- Conflict Flash Message -->
+    <div class="conflict-flash" id="conflictFlash">
+        <div class="flash-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div class="flash-message"></div>
+            <button class="flash-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/schedule.js"></script>
+    <script>
+        // Update copyright year dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentYear = new Date().getFullYear();
+            document.getElementById('currentYear').textContent = currentYear;
+        });
+    </script>
+</body>
+</html>

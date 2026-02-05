@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Clients - Clinic Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/clients.css">
+    <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body class="clients-page">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-3d">
+                <div class="logo-inner">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>Clinic</h2>
+                    <p>Management</p>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item" data-page="dashboard">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="nav-text">Dashboard</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="therapists">
+                <div class="nav-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <span class="nav-text">Therapists</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item active" data-page="clients">
+                <div class="nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <span class="nav-text">Clients</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="schedule">
+                <div class="nav-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <span class="nav-text">Schedule</span>
+                <div class="nav-glow"></div>
+            </li>
+        </ul>
+
+        <div class="user-profile">
+            <div class="user-avatar">
+                <div class="avatar-3d">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            <div class="user-info">
+                <h4 id="adminName">Admin User</h4>
+                <p id="adminEmail">admin@clinic.com</p>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-left">
+                <h1 class="page-title">
+                    <i class="fas fa-users"></i>
+                    <span>Client Management</span>
+                </h1>
+                <p class="page-subtitle">Manage clients, appointments, and payments</p>
+            </div>
+            <div class="header-right">
+                <button class="header-btn btn-3d" id="addClientBtn">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Add Client</span>
+                </button>
+                <button class="header-btn btn-3d" id="exportBtn">
+                    <i class="fas fa-download"></i>
+                    <span>Export</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-overview">
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalClients">0</h3>
+                        <p>Total Clients</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeClients">0</h3>
+                        <p>Active Clients</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-hourglass-end"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="expiringSoon">0</h3>
+                        <p>Expiring Soon</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingPayments">0</h3>
+                        <p>Pending Payments</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Client Filters -->
+        <section class="client-filters">
+            <div class="filters-header">
+                <h3><i class="fas fa-filter"></i> Filters</h3>
+                <button class="btn-link" id="clearFilters">
+                    Clear All
+                </button>
+            </div>
+            
+            <div class="filters-grid">
+                <!-- Search -->
+                <div class="filter-group">
+                    <label><i class="fas fa-search"></i> Search</label>
+                    <input type="text" id="searchClients" placeholder="Search by name, email, or phone...">
+                </div>
+                
+                <!-- Status -->
+                <div class="filter-group">
+                    <label><i class="fas fa-toggle-on"></i> Status</label>
+                    <select id="filterStatus">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+                
+                <!-- Payment -->
+                <div class="filter-group">
+                    <label><i class="fas fa-money-bill"></i> Payment</label>
+                    <select id="filterPayment">
+                        <option value="all">All Payments</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                        <option value="partial">Partial</option>
+                    </select>
+                </div>
+                
+                <!-- Therapy Type -->
+                <div class="filter-group">
+                    <label><i class="fas fa-stethoscope"></i> Therapy Type</label>
+                    <select id="filterTherapy">
+                        <option value="all">All Therapies</option>
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+                
+                <!-- Therapist -->
+                <div class="filter-group">
+                    <label><i class="fas fa-user-md"></i> Therapist</label>
+                    <select id="filterTherapist">
+                        <option value="all">All Therapists</option>
+                        <!-- Options will be populated by JS -->
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clients Table -->
+        <section class="clients-table-section">
+            <div class="table-header">
+                <h2><i class="fas fa-list"></i> Client List</h2>
+                <div class="table-actions">
+                    <button class="action-btn" id="bulkDeleteBtn" disabled>
+                        <i class="fas fa-trash"></i>
+                        Delete Selected
+                    </button>
+                    <button class="action-btn" id="sendRemindersBtn">
+                        <i class="fas fa-bell"></i>
+                        Send Reminders
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="clients-table" id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAll">
+                            </th>
+                            <th>Client</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Expiry</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTableBody">
+                        <!-- Client rows will be loaded here -->
+                        <tr class="empty-row">
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fas fa-users"></i>
+                                    <h3>No Clients Found</h3>
+                                    <p>Add your first client to get started</p>
+                                    <button class="btn-primary btn-3d" id="emptyAddBtn">
+                                        <i class="fas fa-plus"></i>
+                                        Add Client
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="table-footer">
+                <div class="table-info">
+                    Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> clients
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Expirations -->
+        <section class="expirations-section">
+            <div class="section-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Upcoming Expirations (Next 7 Days)</h2>
+                <button class="btn-secondary" id="viewAllExpirations">
+                    View All
+                </button>
+            </div>
+            <div class="expirations-grid" id="expirationsGrid">
+                <!-- Expiration cards will be loaded here -->
+            </div>
+        </section>
+         <!-- Copyright Footer -->
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+               <p>Designed and maintained by <strong><a href="mailto:alwin4778@gmail.com">Alwin George</a></strong> and <strong>
+        <a href="mailto:ssaji5956@gmail.com">Sijo Saji</a></strong></p>
+                <p class="copyright">Copyright © <span id="currentYear">2026 clinic managenment </span></p>
+            </div>
+        </footer>
+    </main>
+
+<!-- Add/Edit Client Modal -->
+<div class="modal-overlay" id="clientModal">
+    <div class="modal-container modal-3d wide">
+        <div class="modal-header">
+            <h3 id="modalTitle">
+                <i class="fas fa-user-plus"></i> Add New Client
+            </h3>
+            <button class="modal-close" id="closeClientModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="clientForm">
+                <div class="form-tabs">
+                    <button type="button" class="tab-btn active" data-tab="basic">
+                        <i class="fas fa-user"></i> Basic Info
+                    </button>
+                    <button type="button" class="tab-btn" data-tab="payment">
+                        <i class="fas fa-money-bill"></i> Payment
+                    </button>
+                </div>
+                
+                <div class="tab-content active" id="tab-basic">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">
+                                <i class="fas fa-user"></i> Full Name *
+                            </label>
+                            <input type="text" id="clientName" required 
+                                   placeholder="Enter client's full name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="clientEmail">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <input type="email" id="clientEmail"
+                                   placeholder="Enter client's email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientPhone">
+                                <i class="fas fa-phone"></i> Phone Number *
+                            </label>
+                            <input type="tel" id="clientPhone" required
+                                   placeholder="Enter phone number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="clientAge">
+                                <i class="fas fa-birthday-cake"></i> Age
+                            </label>
+                            <input type="number" id="clientAge" min="0" max="120"
+                                   placeholder="Enter age">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">
+                                <i class="fas fa-calendar-times"></i> Expiry Date *
+                            </label>
+                            <input type="date" id="expiryDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="clientAddress">
+                            <i class="fas fa-home"></i> Address
+                        </label>
+                        <textarea id="clientAddress" rows="2"
+                                  placeholder="Enter full address"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="clientNotes">
+                            <i class="fas fa-sticky-note"></i> Medical Notes
+                        </label>
+                        <textarea id="clientNotes" rows="3"
+                                  placeholder="Any medical history or special notes..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-payment">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paymentStatus">
+                                <i class="fas fa-money-check"></i> Payment Status *
+                            </label>
+                            <select id="paymentStatus" required>
+                                <option value="pending">Pending</option>
+                                <option value="paid">Paid</option>
+                                <option value="partial">Partial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="totalAmount">
+                                <i class="fas fa-dollar-sign"></i> Total Amount
+                            </label>
+                            <input type="number" id="totalAmount" step="0.01" min="0"
+                                   placeholder="Enter total amount">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="paidAmount">
+                                <i class="fas fa-coins"></i> Paid Amount
+                            </label>
+                            <input type="number" id="paidAmount" step="0.01" min="0"
+                                   placeholder="Enter paid amount">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="paymentMethod">
+                                <i class="fas fa-credit-card"></i> Payment Method
+                            </label>
+                            <select id="paymentMethod">
+                                <option value="">Select Method</option>
+                                <option value="cash">Cash</option>
+                                <option value="card">Card</option>
+                                <option value="bank">Bank Transfer</option>
+                                <option value="online">Online Payment</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paymentNotes">
+                            <i class="fas fa-receipt"></i> Payment Notes
+                        </label>
+                        <textarea id="paymentNotes" rows="2"
+                                  placeholder="Payment reference or notes..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelClient">
+                        Cancel
+                    </button>
+                    <div class="action-right">
+                        <button type="button" class="btn-secondary" id="prevTab" disabled>
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn-primary" id="nextTab">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" class="btn-primary btn-3d" id="submitClient" style="display: none;">
+                            <i class="fas fa-save"></i>
+                            Save Client
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Client Details Modal -->
+    <div class="modal-overlay" id="clientDetailsModal">
+        <div class="modal-container modal-3d wide">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-circle"></i> Client Details</h3>
+                <button class="modal-close" id="closeDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="client-details" id="clientDetailsContent">
+                    <!-- Details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Schedule Modal -->
+    <div class="modal-overlay" id="scheduleModal">
+        <div class="modal-container modal-3d">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-plus"></i> Schedule Appointment</h3>
+                <button class="modal-close" id="closeScheduleModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleForm">
+                    <div class="form-group">
+                        <label for="scheduleClient">
+                            <i class="fas fa-user"></i> Client
+                        </label>
+                        <input type="text" id="scheduleClient" readonly>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="scheduleDate">
+                                <i class="fas fa-calendar"></i> Date *
+                            </label>
+                            <input type="date" id="scheduleDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="scheduleTime">
+                                <i class="fas fa-clock"></i> Time *
+                            </label>
+                            <input type="time" id="scheduleTime" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="scheduleTherapist">
+                            <i class="fas fa-user-md"></i> Therapist *
+                        </label>
+                        <select id="scheduleTherapist" required>
+                            <option value="">Select Therapist</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="scheduleNotes">
+                            <i class="fas fa-sticky-note"></i> Notes
+                        </label>
+                        <textarea id="scheduleNotes" rows="3"
+                                  placeholder="Appointment notes..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelSchedule">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn-primary btn-3d">
+                            <i class="fas fa-calendar-check"></i>
+                            Schedule Appointment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="spinner-3d">
+            <div class="spinner-inner"></div>
+        </div>
+        <p>Loading Clients...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/clients.js"></script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - Clinic Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body class="dashboard-page">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <!-- 3D Clinic Logo -->
+        <div class="sidebar-logo">
+            <div class="logo-3d">
+                <div class="logo-inner">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <div class="logo-text">
+                    <h2>Clinic</h2>
+                    <p>Management</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <ul class="nav-menu">
+            <li class="nav-item active" data-page="dashboard">
+                <div class="nav-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span class="nav-text">Dashboard</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="therapists">
+                <div class="nav-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <span class="nav-text">Therapists</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="clients">
+                <div class="nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <span class="nav-text">Clients</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="schedule">
+                <div class="nav-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <span class="nav-text">Schedule</span>
+                <div class="nav-glow"></div>
+            </li>
+            <li class="nav-item" data-page="settings">
+                <div class="nav-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <span class="nav-text">Settings</span>
+                <div class="nav-glow"></div>
+            </li>
+        </ul>
+
+        <!-- User Profile -->
+        <div class="user-profile">
+            <div class="user-avatar">
+                <div class="avatar-3d">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            <div class="user-info">
+                <h4 id="adminName">Admin User</h4>
+                <p id="adminEmail">admin@clinic.com</p>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1 class="welcome-title">
+                    <span class="welcome-text">Welcome back,</span>
+                    <span class="admin-name" id="welcomeName">Admin</span>
+                </h1>
+                <p class="welcome-subtitle" id="currentDate"></p>
+            </div>
+            <div class="header-right">
+                <button class="header-btn btn-3d" id="quickAdd">
+                    <i class="fas fa-plus"></i>
+                    <span>Quick Add</span>
+                </button>
+                <div class="notifications">
+                    <button class="header-btn btn-3d" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count" id="notificationCount">3</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <!-- Active Clients -->
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <div class="icon-3d">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="activeClients">0</h3>
+                        <p class="stat-label">Active Clients</p>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up trend-up"></i>
+                        <span>+12%</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+
+                <!-- Active Therapists -->
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <div class="icon-3d">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="activeTherapists">0</h3>
+                        <p class="stat-label">Active Therapists</p>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up trend-up"></i>
+                        <span>+8%</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+
+                <!-- Today's Appointments -->
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <div class="icon-3d">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="todayAppointments">0</h3>
+                        <p class="stat-label">Today's Appointments</p>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up trend-up"></i>
+                        <span>+5%</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+
+                <!-- Pending Payments -->
+                <div class="stat-card glass">
+                    <div class="stat-icon">
+                        <div class="icon-3d">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="pendingPayments">0</h3>
+                        <p class="stat-label">Pending Payments</p>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-down trend-down"></i>
+                        <span>-3%</span>
+                    </div>
+                    <div class="stat-glow"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <section class="content-grid">
+            <!-- Left Column -->
+            <div class="grid-left">
+                <!-- Today's Schedule -->
+                <div class="content-card glass">
+                    <div class="card-header">
+                        <h3><i class="fas fa-calendar-day"></i> Today's Schedule</h3>
+                        <button class="card-action" id="viewAllSchedule">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="schedule-list" id="todaySchedule">
+                            <!-- Schedule items will be loaded here -->
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-times"></i>
+                                <p>No appointments today</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="content-card glass">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" data-action="add-client">
+                                <div class="action-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <span>Add Client</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="add-therapist">
+                                <div class="action-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <span>Add Therapist</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="view-schedule">
+                                <div class="action-icon">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+                                <span>Book Appointment</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="generate-report">
+                                <div class="action-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <span>Generate Report</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="grid-right">
+                <!-- Upcoming Expirations -->
+                <div class="content-card glass">
+                    <div class="card-header">
+                        <h3><i class="fas fa-clock"></i> Upcoming Expirations</h3>
+                        <button class="card-action" id="viewAllExpirations">
+                            View All <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="expiration-list" id="upcomingExpirations">
+                            <!-- Expiration items will be loaded here -->
+                            <div class="empty-state">
+                                <i class="fas fa-check-circle"></i>
+                                <p>No upcoming expirations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Therapist Availability -->
+                <div class="content-card glass">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-clock"></i> Therapist Availability</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="availability-grid" id="therapistAvailability">
+                            <!-- Availability indicators will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="content-card glass">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-timeline" id="recentActivity">
+                            <!-- Activity items will be loaded here -->
+                            <div class="empty-state">
+                                <i class="fas fa-history"></i>
+                                <p>No recent activity</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Department Overview -->
+        <section class="department-section">
+            <div class="section-header">
+                <h2><i class="fas fa-clinic-medical"></i> Department Overview</h2>
+            </div>
+            <div class="department-grid" id="departmentOverview">
+                <!-- Department cards will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Copyright Footer -->
+        <footer class="dashboard-footer">
+            <div class="footer-content">
+                <p>Designed and maintained by <strong><a href="mailto:alwin4778@gmail.com">Alwin George</a></strong> and <strong>
+        <a href="mailto:ssaji5956@gmail.com">Sijo Saji</a></strong></p>
+                <p class="copyright">Copyright © <span id="currentYear"></span> clinic managenment</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Quick Add Modal -->
+    <div class="modal-overlay" id="quickAddModal">
+        <div class="modal-container modal-3d">
+            <div class="modal-header">
+                <h3>Quick Add</h3>
+                <button class="modal-close" id="closeQuickAdd">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="quick-add-options">
+                    <button class="add-option" data-type="client">
+                        <div class="option-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="option-info">
+                            <h4>Add New Client</h4>
+                            <p>Register a new client with therapy details</p>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <button class="add-option" data-type="therapist">
+                        <div class="option-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="option-info">
+                            <h4>Add New Therapist</h4>
+                            <p>Add a new therapist to the department</p>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    
+                    <button class="add-option" data-type="appointment">
+                        <div class="option-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <div class="option-info">
+                            <h4>Schedule Appointment</h4>
+                            <p>Book a new appointment for existing client</p>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <div class="panel-header">
+            <h3>Notifications</h3>
+            <button class="panel-close" id="closeNotifications">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="panel-body">
+            <div class="notification-list" id="notificationList">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="spinner-3d">
+            <div class="spinner-inner"></div>
+        </div>
+        <p>Loading Dashboard...</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast">
+        <div class="toast-content">
+            <div class="toast-icon"></div>
+            <div class="toast-message"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <script>
+        // Update copyright year dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentYear = new Date().getFullYear();
+            document.getElementById('currentYear').textContent = currentYear;
+        });
+    </script>
+</body>
+</html>
