@@ -2035,3 +2035,119 @@
 .form-group label i {
   opacity: 0.9;
 }
+/* ===== MOBILE BOTTOM NAVIGATION ===== */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        padding: 0.5rem 1rem;
+        border-right: none;
+        border-top: 1px solid var(--glass-border);
+        z-index: 1000;
+        transform: translateX(0);
+    }
+    
+    .sidebar-logo {
+        display: none;
+    }
+    
+    .nav-menu {
+        display: flex;
+        justify-content: space-around;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .nav-item {
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        margin-bottom: 0;
+        flex: 1;
+        min-width: 70px;
+    }
+    
+    .nav-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-text {
+        font-size: 0.7rem;
+        text-align: center;
+        white-space: nowrap;
+    }
+    
+    .user-profile {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        margin-bottom: 70px; /* Space for mobile navbar */
+        padding: 1.5rem;
+        padding-bottom: 2rem;
+    }
+    
+    /* Mobile Bottom Navigation - Hidden since we're using transformed sidebar */
+    .mobile-bottom-nav {
+        display: none;
+    }
+    
+    .mobile-menu-toggle {
+        display: none;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-item {
+        padding: 0.4rem;
+        min-width: 60px;
+    }
+    
+    .nav-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 0.8rem;
+    }
+    
+    .nav-text {
+        font-size: 0.65rem;
+    }
+    
+    .main-content {
+        padding: 1rem;
+        margin-bottom: 65px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-item {
+        min-width: 55px;
+        padding: 0.3rem;
+    }
+    
+    .nav-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+    }
+    
+    .nav-text {
+        font-size: 0.6rem;
+    }
+    
+    .main-content {
+        margin-bottom: 60px;
+    }
+}

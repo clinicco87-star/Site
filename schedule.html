@@ -495,11 +495,79 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/schedule.js"></script>
+        <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <div class="mobile-nav-item" data-page="dashboard">
+            <div class="mobile-nav-icon">
+                <i class="fas fa-home"></i>
+            </div>
+            <span class="mobile-nav-text">Dashboard</span>
+        </div>
+        <div class="mobile-nav-item" data-page="therapists">
+            <div class="mobile-nav-icon">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <span class="mobile-nav-text">Therapists</span>
+        </div>
+        <div class="mobile-nav-item" data-page="clients">
+            <div class="mobile-nav-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <span class="mobile-nav-text">Clients</span>
+        </div>
+        <div class="mobile-nav-item active" data-page="schedule">
+            <div class="mobile-nav-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <span class="mobile-nav-text">Schedule</span>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Script for mobile navigation -->
     <script>
-        // Update copyright year dynamically
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            if (mobileMenuToggle && sidebar && sidebarOverlay) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    sidebar.classList.add('active');
+                    sidebarOverlay.classList.add('active');
+                });
+                
+                sidebarOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                });
+            }
+            
+            // Mobile bottom navigation
+            const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+            mobileNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    if (page && page !== 'schedule') {
+                        window.location.href = `${page}.html`;
+                    }
+                });
+            });
+            
+            // Update copyright year
             const currentYear = new Date().getFullYear();
-            document.getElementById('currentYear').textContent = currentYear;
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = currentYear;
+            }
         });
     </script>
 </body>
