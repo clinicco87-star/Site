@@ -486,9 +486,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             <button class="action-icon edit" data-id="${client.id}" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="action-icon schedule" data-id="${client.id}" title="Schedule">
-                                <i class="fas fa-calendar-plus"></i>
-                            </button>
                             <button class="action-icon delete" data-id="${client.id}" title="Delete">
                                 <i class="fas fa-trash"></i>
                             </button>
