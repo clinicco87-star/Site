@@ -1528,119 +1528,666 @@ body.therapists-page {
 .sidebar-overlay.active {
     display: block;
 }
-/* ===== MOBILE BOTTOM NAVIGATION ===== */
+/* =========================================================
+   MOBILE: Sidebar -> Bottom Navigation (like Clients page)
+   Add this at the VERY END of therapists.css
+   ========================================================= */
+
+/* Make sure main content never hides behind bottom nav */
 @media (max-width: 1024px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        left: 0;
-        right: 0;
-        padding: 0.5rem 1rem;
-        border-right: none;
-        border-top: 1px solid var(--glass-border);
-        z-index: 1000;
-        transform: translateX(0);
-    }
-    
-    .sidebar-logo {
-        display: none;
-    }
-    
-    .nav-menu {
-        display: flex;
-        justify-content: space-around;
-        padding: 0;
-        margin: 0;
-    }
-    
-    .nav-item {
-        flex-direction: column;
-        gap: 0.25rem;
-        padding: 0.5rem;
-        margin-bottom: 0;
-        flex: 1;
-        min-width: 70px;
-    }
-    
-    .nav-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.9rem;
-    }
-    
-    .nav-text {
-        font-size: 0.7rem;
-        text-align: center;
-        white-space: nowrap;
-    }
-    
-    .user-profile {
-        display: none;
-    }
-    
-    .main-content {
-        margin-left: 0;
-        margin-bottom: 70px; /* Space for mobile navbar */
-        padding: 1.5rem;
-        padding-bottom: 2rem;
-    }
-    
-    /* Mobile Bottom Navigation - Hidden since we're using transformed sidebar */
-    .mobile-bottom-nav {
-        display: none;
-    }
-    
-    .mobile-menu-toggle {
-        display: none;
-    }
-    
-    .sidebar-overlay {
-        display: none;
-    }
+  /* Sidebar becomes bottom nav */
+  body.therapists-page .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+
+    padding: 0.6rem 0.9rem;
+    border-right: none;
+    border-top: 1px solid var(--glass-border);
+
+    background: rgba(15, 23, 42, 0.96);
+    backdrop-filter: blur(16px);
+
+    transform: none !important; /* override slide-in sidebar behavior */
+    z-index: 2000;
+  }
+
+  /* Hide big logo + user section on bottom nav */
+  body.therapists-page .sidebar-logo,
+  body.therapists-page .user-profile {
+    display: none !important;
+  }
+
+  /* Nav becomes horizontal */
+  body.therapists-page .nav-menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    gap: 0.35rem;
+  }
+
+  body.therapists-page .nav-item {
+    flex: 1;
+    margin: 0;
+    padding: 0.55rem 0.4rem;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+
+    border-radius: 14px;
+    border-left: none !important; /* remove left border from desktop active state */
+  }
+
+  /* Icons smaller for bottom bar */
+  body.therapists-page .nav-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* Text smaller */
+  body.therapists-page .nav-text {
+    font-size: 0.72rem;
+    line-height: 1;
+    text-align: center;
+  }
+
+  /* Active state looks good in bottom bar */
+  body.therapists-page .nav-item.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  }
+
+  /* Main content spacing for bottom nav */
+  body.therapists-page .main-content {
+    margin-left: 0 !important;
+    padding: 1rem !important;
+
+    /* space for bottom bar */
+    padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+  }
+
+  /* If you had a sidebar overlay / mobile toggle system, disable it on this page */
+  body.therapists-page .sidebar-overlay,
+  body.therapists-page .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  /* Footer won’t get hidden */
+  body.therapists-page .dashboard-footer {
+    margin-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Smaller phones */
+@media (max-width: 480px) {
+  body.therapists-page .nav-text {
+    font-size: 0.65rem;
+  }
+  body.therapists-page .nav-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+}
+/* =========================================================
+   MOBILE VIEW FIXES - Keeping bottom navigation as is
+   Only fixing overflow and sizing issues
+   ========================================================= */
+
+/* Make sure main content never hides behind bottom nav */
+@media (max-width: 1024px) {
+  /* Sidebar becomes bottom nav - KEEPING YOUR EXACT CODE */
+  body.therapists-page .sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    padding: 0.6rem 0.9rem;
+    border-right: none;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(15, 23, 42, 0.96);
+    backdrop-filter: blur(16px);
+    transform: none !important;
+    z-index: 2000;
+  }
+
+  /* Hide big logo + user section on bottom nav */
+  body.therapists-page .sidebar-logo,
+  body.therapists-page .user-profile {
+    display: none !important;
+  }
+
+  /* Nav becomes horizontal */
+  body.therapists-page .nav-menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    gap: 0.35rem;
+  }
+
+  body.therapists-page .nav-item {
+    flex: 1;
+    margin: 0;
+    padding: 0.55rem 0.4rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 14px;
+    border-left: none !important;
+  }
+
+  /* Icons smaller for bottom bar */
+  body.therapists-page .nav-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* Text smaller */
+  body.therapists-page .nav-text {
+    font-size: 0.72rem;
+    line-height: 1;
+    text-align: center;
+  }
+
+  /* Active state */
+  body.therapists-page .nav-item.active {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  }
+
+  /* Main content spacing for bottom nav - FIXED OVERFLOW */
+  body.therapists-page .main-content {
+    margin-left: 0 !important;
+    padding: 1rem !important;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Hide mobile menu toggle since we have bottom nav */
+  body.therapists-page .mobile-menu-toggle {
+    display: none !important;
+  }
+
+  /* Fix page header overflow on mobile */
+  body.therapists-page .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  body.therapists-page .header-right {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  body.therapists-page .header-btn {
+    flex: 1 0 calc(50% - 5px);
+    min-width: 0;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  /* Fix stats grid overflow */
+  body.therapists-page .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  body.therapists-page .stat-card {
+    padding: 15px;
+    min-width: 0;
+  }
+
+  body.therapists-page .stat-info h3 {
+    font-size: 28px;
+  }
+
+  /* Fix department filter tags overflow */
+  body.therapists-page .department-tags {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  body.therapists-page .department-tag {
+    padding: 8px 16px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  /* Fix search box width */
+  body.therapists-page .search-box {
+    width: 100%;
+    min-width: auto;
+  }
+
+  /* Fix therapists grid */
+  body.therapists-page .therapists-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+  }
+
+  body.therapists-page .therapist-card {
+    min-width: 0;
+  }
+
+  /* Fix modal on mobile */
+  body.therapists-page .modal-container {
+    width: 95%;
+    max-width: 95%;
+    margin: 10px;
+  }
+
+  /* Footer spacing */
+  body.therapists-page .dashboard-footer {
+    margin-bottom: calc(80px + env(safe-area-inset-bottom));
+    padding: 1rem 0;
+  }
+
+  body.therapists-page .footer-content p {
+    font-size: 0.85rem;
+    padding: 0 10px;
+  }
+}
+
+/* Tablet and smaller screens */
+@media (max-width: 768px) {
+  body.therapists-page .main-content {
+    padding: 15px !important;
+    padding-bottom: calc(85px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.therapists-page .page-title span {
+    font-size: 24px;
+  }
+
+  body.therapists-page .page-subtitle {
+    font-size: 14px;
+  }
+
+  body.therapists-page .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.therapists-page .therapists-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.therapists-page .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  body.therapists-page .search-box input {
+    padding: 10px 10px 10px 40px;
+    font-size: 14px;
+  }
+
+  /* Fix therapist card content */
+  body.therapists-page .therapist-header {
+    padding: 15px;
+    flex-wrap: wrap;
+  }
+
+  body.therapists-page .therapist-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+  }
+
+  body.therapists-page .therapist-name {
+    font-size: 18px;
+  }
+
+  body.therapists-page .therapist-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  body.therapists-page .action-btn {
+    width: 100%;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  body.therapists-page .main-content {
+    padding: 12px !important;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.therapists-page .nav-text {
+    font-size: 0.65rem;
+  }
+
+  body.therapists-page .nav-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  /* Fix header buttons on very small screens */
+  body.therapists-page .header-btn {
+    flex: 1 0 100%;
+  }
+
+  body.therapists-page .header-btn span {
+    font-size: 13px;
+  }
+
+  /* Fix department tags on small screens */
+  body.therapists-page .department-tags {
+    flex-direction: column;
+  }
+
+  body.therapists-page .department-tag {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Fix modal on very small screens */
+  body.therapists-page .modal-container {
+    width: 98%;
+    max-height: 90vh;
+    margin: 5px;
+  }
+
+  body.therapists-page .modal-body {
+    padding: 15px;
+  }
+
+  /* Fix form elements */
+  body.therapists-page .form-group input,
+  body.therapists-page .form-group select,
+  body.therapists-page .form-group textarea {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  body.therapists-page .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  body.therapists-page .btn-primary,
+  body.therapists-page .btn-secondary {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  /* Fix footer text */
+  body.therapists-page .dashboard-footer {
+    margin-bottom: calc(75px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Extra small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+  body.therapists-page .main-content {
+    padding: 10px !important;
+    padding-bottom: calc(75px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.therapists-page .page-title span {
+    font-size: 22px;
+  }
+
+  body.therapists-page .header-btn {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  body.therapists-page .header-btn i {
+    font-size: 14px;
+  }
+
+  body.therapists-page .stat-card {
+    padding: 12px;
+  }
+
+  body.therapists-page .stat-info h3 {
+    font-size: 24px;
+  }
+
+  body.therapists-page .stat-info p {
+    font-size: 12px;
+  }
+
+  body.therapists-page .therapist-header {
+    padding: 12px;
+  }
+
+  body.therapists-page .therapist-body,
+  body.therapists-page .therapist-footer {
+    padding: 15px;
+  }
+
+  body.therapists-page .detail-item {
+    font-size: 13px;
+  }
+
+  /* Ensure nothing overflows horizontally */
+  body.therapists-page * {
+    max-width: 100%;
+  }
+}
+
+/* Fix for landscape mode on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  body.therapists-page .sidebar {
+    padding: 0.4rem 0.9rem;
+  }
+
+  body.therapists-page .nav-item {
+    padding: 0.4rem;
+  }
+
+  body.therapists-page .nav-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+
+  body.therapists-page .nav-text {
+    font-size: 0.6rem;
+  }
+
+  body.therapists-page .main-content {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom)) !important;
+  }
+}
+/* Add these styles to fix leave management mobile view */
+
+@media (max-width: 1024px) {
+  /* Leave management fixes for mobile */
+  body.therapists-page .leave-management {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  body.therapists-page .leave-calendar {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  body.therapists-page .leave-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  body.therapists-page .leave-dates {
+    min-width: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  body.therapists-page .leave-details {
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  body.therapists-page .leave-actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 @media (max-width: 768px) {
-    .nav-item {
-        padding: 0.4rem;
-        min-width: 60px;
-    }
-    
-    .nav-icon {
-        width: 26px;
-        height: 26px;
-        font-size: 0.8rem;
-    }
-    
-    .nav-text {
-        font-size: 0.65rem;
-    }
-    
-    .main-content {
-        padding: 1rem;
-        margin-bottom: 65px;
-    }
+  body.therapists-page .leave-management .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  body.therapists-page .leave-list {
+    gap: 10px;
+  }
+  
+  body.therapists-page .leave-item {
+    padding: 10px;
+  }
+  
+  body.therapists-page .leave-dates .date {
+    font-size: 13px;
+  }
+  
+  body.therapists-page .leave-details .therapist-name {
+    font-size: 16px;
+  }
+  
+  body.therapists-page .leave-details .reason {
+    font-size: 12px;
+  }
+  
+  body.therapists-page .btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  body.therapists-page .leave-empty-state {
+    padding: 30px 15px;
+  }
+  
+  body.therapists-page .leave-empty-state i {
+    font-size: 36px;
+  }
+  
+  body.therapists-page .leave-empty-state h3 {
+    font-size: 18px;
+  }
+  
+  body.therapists-page .leave-empty-state p {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
-    .nav-item {
-        min-width: 55px;
-        padding: 0.3rem;
-    }
-    
-    .nav-icon {
-        width: 24px;
-        height: 24px;
-        font-size: 0.75rem;
-    }
-    
-    .nav-text {
-        font-size: 0.6rem;
-    }
-    
-    .main-content {
-        margin-bottom: 60px;
-    }
+  body.therapists-page .leave-item {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  body.therapists-page .leave-dates {
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  body.therapists-page .leave-dates .date {
+    font-size: 12px;
+  }
+  
+  body.therapists-page .leave-details .therapist-name {
+    font-size: 15px;
+  }
+  
+  body.therapists-page .leave-details .reason {
+    font-size: 11px;
+  }
+  
+  body.therapists-page .leave-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  
+  body.therapists-page .btn-small {
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+  }
+  
+  body.therapists-page .leave-empty-state {
+    padding: 20px 10px;
+  }
+  
+  body.therapists-page .leave-empty-state i {
+    font-size: 32px;
+  }
+  
+  body.therapists-page .leave-empty-state h3 {
+    font-size: 16px;
+  }
+  
+  body.therapists-page .leave-empty-state p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 375px) {
+  body.therapists-page .leave-dates {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 10px;
+  }
+  
+  body.therapists-page .leave-dates .date {
+    font-size: 11px;
+  }
+  
+  body.therapists-page .leave-details .therapist-name {
+    font-size: 14px;
+  }
+  
+  body.therapists-page .leave-details .reason {
+    font-size: 10px;
+  }
+  
+  body.therapists-page .btn-small {
+    font-size: 11px;
+    padding: 6px;
+  }
 }
